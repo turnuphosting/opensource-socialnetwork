@@ -13,7 +13,7 @@
  * @copyright 2012 - 2020 Marcus Bointon
  * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
- * @license   http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
+ * @license   https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html GNU Lesser General Public License
  * @note      This program is distributed in the hope that it will be useful - WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
@@ -44,7 +44,7 @@ class POP3
      *
      * @var string
      */
-    const VERSION = '6.6.0';
+    const VERSION = '6.9.1';
 
     /**
      * Default POP3 port number.
@@ -335,7 +335,12 @@ class POP3
      */
     public function disconnect()
     {
-        $this->sendString('QUIT');
+        // If could not connect at all, no need to disconnect
+        if ($this->pop_conn === false) {
+            return;
+        }
+
+        $this->sendString('QUIT' . static::LE);
 
         // RFC 1939 shows POP3 server sending a +OK response to the QUIT command.
         // Try to get it.  Ignore any failures here.

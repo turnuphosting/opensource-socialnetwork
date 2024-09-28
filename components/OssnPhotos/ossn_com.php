@@ -2,7 +2,7 @@
 /**
  * Open Source Social Network
  *
- * @package   (openteknik.com).ossn
+ * @package   Open Source Social Network (OSSN)
  * @author    OSSN Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
@@ -209,6 +209,7 @@ function ossn_notification_like_photo($hook, $type, $return, $notification) {
 				'viewed'    => $notification->viewed,
 				'url'       => $url,
 				'icon_type' => $iconType,
+				'instance'  => $notification,
 				'fullname'  => $user->fullname,
 		));
 }
@@ -281,6 +282,11 @@ function ossn_photos_page_handler($album) {
 
 						$view            = new OssnPhotos();
 						$image           = $view->GetPhoto($photo['photo']);
+						
+						if(!$image){
+								ossn_error_page();	
+						}
+						
 						$photo['entity'] = $image;
 
 						//redirect user to home page if image is empty

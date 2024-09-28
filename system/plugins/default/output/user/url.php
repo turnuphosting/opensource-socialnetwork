@@ -2,7 +2,7 @@
 /**
  * Open Source Social Network
  *
- * @package   (openteknik.com).ossn
+ * @package   Open Source Social Network (OSSN)
  * @author    OSSN Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
@@ -17,6 +17,7 @@ $default = array(
 		'href'  => $params['user']->profileURL(),
 		'text'  => $params['user']->fullname,
 		'class' => 'ossn-output-user-url',
+		'data-username' => $params['user']->username,
 );
 unset($params['user']);
 if(isset($params['class'])) {

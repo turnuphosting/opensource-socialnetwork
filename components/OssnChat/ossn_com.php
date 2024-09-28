@@ -3,7 +3,7 @@
  * Open Source Social Network
  *
  * @package   Open Source Social Network
- * @author    Open Social Website Core Team <info@openteknik.com>
+ * @author    Open Source Social Network Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
  * @link      https://www.opensource-socialnetwork.org/
@@ -41,6 +41,9 @@ function ossn_js_page_handler($pages) {
 				if(!ossn_isLoggedIn()) {
 						ossn_error_page();
 				}
+				//Session locking issue #2343
+				//Session is not set in this place only getting so closing is fine
+				session_write_close();
 				if(isset($pages[1]) && $pages[1] == 'ossn.boot.chat.js') {
 						header('Content-Type: application/javascript');
 						echo ossn_plugin_view('js/OssnChat.Boot');

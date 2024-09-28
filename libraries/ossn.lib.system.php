@@ -2,7 +2,7 @@
 /**
  * Open Source Social Network
  *
- * @package   (openteknik.com).ossn
+ * @package   Open Source Social Network (OSSN)
  * @author    OSSN Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
@@ -451,27 +451,35 @@ function arraySerialize($array = NULL) {
 
 /**
  * Limit a words in a string
- * @params $str = string;
- * @params $limit = words limit;
- * @param integer $limit
  *
- * @last edit: $arsalanshah
- * @return bool
+ * @params string  $str Text you want to trim
+ * @params int     $limit Maxmium string width
+ * @params boolean $dots Show dots at end of string ?
+ *
+ * @return string
  */
-function strl($str, $limit = NULL, $dots = true) {
-	if (isset($str) && isset($limit)) {
-		if (strlen($str) > $limit) {
-			if ($dots == true) {
-				return substr($str, 0, $limit) . '...';
-			} elseif ($dots == false) {
-				return substr($str, 0, $limit);
-			}
-		} elseif (strlen($str) <= $limit) {
-			return $str;
+function strl($str, $limit = null, $dots = true) {
+		if(mb_strlen($str, 'UTF-8') > $limit) {
+				$str       = html_entity_decode($str, ENT_QUOTES, 'UTF-8');
+				$str       = mb_substr($str, 0, $limit, 'UTF-8');
+				$str       = htmlentities($str, ENT_QUOTES, 'UTF-8');
+				$str       = trim($str);
+				$dots_text = '...';
+				if($dots) {
+						//https://gist.github.com/khal3d/4648574
+						$is_rtl = function ($string) {
+								$rtl_chars_pattern = '/[\x{0590}-\x{05ff}\x{0600}-\x{06ff}]/u';
+								return preg_match($rtl_chars_pattern, $string);
+						};
+						$output = $str . $dots_text;
+						if($is_rtl($str)) {
+								$output = $dots_text . $str;
+						}
+						return $output;
+				}
+				return $str;
 		}
-		
-	}
-	return false;
+		return $str;
 }
 
 /**
@@ -894,19 +902,49 @@ function ossn_set_ajax_data(array $data = array()) {
 	}
 }
 /**
- * Generate .htaccess file
- *
- * @return ooolean;
+ * Generate server level config files
+ * 
+ * @param string $type php_user_ini or apache config?
+ * @return boolean
  */
-function ossn_generate_server_config($type) {
-	if ($type == 'apache') {
-		$file = ossn_route()->www . 'installation/configs/htaccess.dist';
-		$file = file_get_contents($file);
-		return file_put_contents(ossn_route()->www . '.htaccess', $file);
-	} elseif ($type == 'nginx') {
+function ossn_generate_server_config($type): bool {
+		if($type == 'apache') {
+				$path = ossn_route()->www;
+				$file = $path . 'installation/configs/htaccess.dist';
+				
+				//[B] Apache config being rewritten if modified by cpanel #2179
+				$comapreFunc = function($file){
+						$file = fopen($file, 'r');
+						$line = fgets($file);
+						fclose($file);
+						$line = preg_replace('/\s+/','', trim($line));
+						return str_replace('#', '', $line);
+				};
+				
+				//[E] Stop rewriting .htaccess every time page loads during installation #2091
+				if(file_exists($path . '.htaccess')) {
+						$actual_check_sum = $comapreFunc($path . '.htaccess');
+						$org_check_sum    = $comapreFunc($file);
+						if($org_check_sum == $actual_check_sum) {
+								return true;
+						}
+				}
+				return file_put_contents($path . '.htaccess', file_get_contents($file));
+		} elseif($type == 'php_user_ini') {
+				$path = ossn_route()->www;
+				$file = $path . 'installation/configs/user.ini.dist';
+				$file = file_get_contents($file);
+
+				if(file_exists($path . '.user.ini')) {
+						$actual_check_sum = md5(file_get_contents($path . '.user.ini'));
+						$org_check_sum    = md5($file);
+						if($org_check_sum == $actual_check_sum) {
+								return true;
+						}
+				}
+				return file_put_contents($path . '.user.ini', $file);
+		}
 		return false;
-	}
-	return false;
 }
 /**
  * Ossn Dump
@@ -941,7 +979,7 @@ function ossn_dump($params = '', $clean = true) {
 function ossn_offset_validate() {
 	//pagination offset should be better protected #627
 	$offset = input('offset');
-	if (!ctype_digit($offset)) {
+	if (!is_numeric($offset)) {
 		unset($_REQUEST['offset']);
 	}
 }

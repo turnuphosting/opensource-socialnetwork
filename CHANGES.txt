@@ -1,3 +1,93 @@
+OSSN - OPEN SOURCE SOCIAL NETWORK v7.6
+- [B] Logo upload failed #2369
+- [B] Reset logo if no logo set before causing error #2368
+- [E] Update phpmailer
+
+OSSN - OPEN SOURCE SOCIAL NETWORK v7.5
+- [B] Editing user giving error, the email already existing (admin panel) #2364
+
+OSSN - OPEN SOURCE SOCIAL NETWORK v7.4
+- [E] OssnNotification autocheck if undefined causing page unresponsive
+
+OSSN - OPEN SOURCE SOCIAL NETWORK v7.3
+- [B] Wall is not visible for group member (other than creator) #2340
+- [B] OssnMessages image attachment broken if invalid file name #2339
+- [B] undefined array key "somekey" in file /var/www/libraries/ossn.lib.image.php (line 83) #2338
+- [E] profile cover album , thumbnail is distorted #2337
+- [E] Perform users edit using custom method instead of plain database->update() #2336
+- [B] URL with a special character in a comment post #2332
+- [B] OssnFile:output doesn't recognize setMimeTypes by component #2331
+- [B] strl showing wrong characters effected by #2257 #2325
+- [E] Hide message view on xs devices on message view page #2323
+- [B] countByYears result in admin panel showing wrong years + limit query to 2 years #2320
+- [B] Show chat bottom on large screens only lg (not md) #2321
+- [E] Show current search query inside search box on search page #2328
+- [B] Goblue 6.4 checkbox (checked) display corrupted #2330
+- [B] Replace col-md with lg #2322
+- [E] .ossn-box-loading not in center #2342
+- [E] Configure able autocheck OssnNotifications #2329
+- [E] Allow selection on multiple users on the unvalidated list current page #2319
+- [E] Session locking issue #2343
+- [B] When fixing #2305 we missed groups cover error handling #2346
+- [E] Revert of old #1436 as its never used anywhere #2345
+- [E] DynamicCaching usage #2335
+- [E] checkboxes check on label click #2348
+- [E] Fix the distorted 404 error page #2353
+- [B] Disorted frontpage icons #2352
+- [B] Truncated placeholder text in friends tagger #2351
+- [B] Transparency change of emoji overlay after editing posts/comments #2350
+- [E] Improvement to checkboxes #2357
+- [E] Mark radio boxes required if not checked #2359
+- [E] OssnBlock allows blocking of moderators #2358
+- [E] Allow rumble embed URL support #2362
+
+
+OSSN - OPEN SOURCE SOCIAL NEWORK  v7.2
+- [B] non-UTF8 chars in 3 language files of Goblue #2298
+- [B] Message send form not showing #2314
+- [E] Add ids in components and themes lists item so can be utilized later #2313
+- [B] Add accept types on file input messages #2311
+- [E] Fetch annotation entities in sperate method #2312
+- [E] Fetch annotation entities in sperate method #2312
+- [B] Message attachment file namev (output url) needs changes #2310
+- [B] online friends being removed from Chat tab #2309
+- [B] Cover reposition issue due to layout updates in past #2305
+- [B] usage of unavailable font-family in Goblue #2301
+- [B] missing declaration of $members in group profile #2307
+- [E] Changing logo should add timestamp to invalidate cache #2302
+- [B] Theme language strings not cached #2299
+- [E] callback for theme before and after load #2299
+- [E] allow to modify default username length using hook #2304
+
+OSSN - OPEN SOURCE SOCIAL NEWORK  v7.1
+- [B] Command to replace slash to backslash missing in vendors/jwt/autoload.php #2274
+- [B] ossn_is_from_cli is returning true on non-cli #2262
+- [B] Unaccepted friend appears in getFriends #2265
+- [B] OssnPhotos::getPhoto should not return other file types #2272
+- [B] hide group members and subpages for private groups #2276
+- [B] Tinymce lists and bullets missing from topbar #2267
+- [E] OssnNotifications check new one on mark all as read #2266
+- [E] Default search result type confusing #2279
+- [E] improve username invalid message #2273
+- [B] Emojis shows entities in trimmed message notification #2257
+- [E] Remove /register page what is it doing? #2270
+- [E] Add max-height in .ossn-wall-item .post-contents img #2259
+- [E] Don't open the last message in messages/all #2283
+- [E] Allow attachment of image in message without text #2268
+- [E] Bootstrap badges have blue on however should be same color #2269
+- [E] output/user/url should have data-username #2284
+- [E] remove Ossn.Viewer js #2286
+- [E] Fontawesome 5.x to 6.x #2285
+- [B] Message typing UI bug for OSSN chat #2288
+- [E] Show only online members in Chat #2287
+- [B] OssnChat showing only 10 users #2263
+- [E] Add option to trigger manually messagebox/overlay box #2277
+- [E] Merge Hungarian langauge #2289
+- [E] phpmailer update #2292
+- [E] new zip mime type #2293
+- [E] Improve installation script #2294
+- [E] Add style to checkboxes #2291
+
 OSSN - OPEN SOURCE SOCIAL NETWORK v7.0
 * [B] fix allowing to display profile modules with priority < 200 #2211
 * [B] User existence check #2222

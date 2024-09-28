@@ -3,7 +3,7 @@
  * Open Source Social Network
  *
  * @package   Open Source Social Network
- * @author    Open Social Website Core Team <info@openteknik.com>
+ * @author    Open Source Social Network Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
  * @link      https://www.opensource-socialnetwork.org/
@@ -155,12 +155,8 @@ function ossn_friend_picker() {
  */
 function ossn_likes_post_notifiation($hook, $type, $return, $params) {
 		$notif          = $params;
-		$baseurl        = ossn_site_url();
 		$user           = ossn_user_by_guid($notif->poster_guid);
-		$user->fullname = "<strong>{$user->fullname}</strong>";
-		$iconURL        = $user->iconURL()->small;
 
-		$img = "<div class='notification-image'><img src='{$iconURL}' /></div>";
 		$url = ossn_site_url("post/view/{$notif->subject_guid}");
 
 		if(preg_match('/like/i', $notif->type)) {
@@ -173,22 +169,18 @@ function ossn_likes_post_notifiation($hook, $type, $return, $params) {
 				$type = 'comment';
 				$url  = ossn_site_url("post/view/{$notif->subject_guid}#comments-item-{$notif->item_guid}");
 		}
-		$type = "<div class='ossn-notification-icon-{$type}'></div>";
-		if($notif->viewed !== null) {
-				$viewed = '';
-		} elseif($notif->viewed == null) {
-				$viewed = 'class="ossn-notification-unviewed"';
-		}
-		$notification_read = "{$baseurl}notification/read/{$notif->guid}?notification=" . urlencode($url);
-		return "<a href='{$notification_read}'>
-	       <li {$viewed}> {$img}
-		   <div class='notfi-meta'> {$type}
-		   <div class='data'>" .
-		ossn_print("ossn:notifications:{$notif->type}", array(
-				$user->fullname,
-		)) .
-				'</div>
-		   </div></li></a>';
+
+		$iconURL = $user->iconURL()->small;
+		return ossn_plugin_view('notifications/template/view', array(
+				'iconURL'   => $iconURL,
+				'guid'      => $notif->guid,
+				'type'      => $notif->type,
+				'viewed'    => $notif->viewed,
+				'url'       => $url,
+				'icon_type' => $type,
+				'instance'  => $notif,
+				'fullname'  => $user->fullname,
+		));		   
 }
 /**
  * Setting up a template for notification view for commponent post

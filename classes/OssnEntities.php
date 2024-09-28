@@ -2,7 +2,7 @@
 /**
  * Open Source Social Network
  *
- * @package   (openteknik.com).ossn
+ * @package   Open Source Social Network (OSSN)
  * @author    OSSN Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
@@ -374,7 +374,8 @@ class OssnEntities extends OssnDatabase {
 				);
 				
 				$vars	= array();
-				$vars['entity'] = $guid;
+				$vars['entity']   = $guid;
+				$vars['instance'] = $this;
 				ossn_trigger_callback('entity', 'before:delete', $vars);
 				
 				if($this->delete($params)) {
@@ -384,7 +385,6 @@ class OssnEntities extends OssnDatabase {
 						);
 						$this->delete($metadata);
 						
-						$vars['entity'] = $guid;
 						ossn_trigger_callback('delete', 'entity', $vars);
 						return true;
 				}

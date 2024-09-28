@@ -2,7 +2,7 @@
 /**
  * Open Source Social Network
  *
- * @package   (openteknik.com).ossn
+ * @package   Open Source Social Network (OSSN)
  * @author    OSSN Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
@@ -42,13 +42,13 @@ function ossn_javascript() {
 		//some internal and external js
 		// [E] Update chart js library #2220
 		ossn_new_external_js('chart.js', 'vendors/Chartjs/chart.js');
-		ossn_new_external_js('jquery-3.6.0.min.js', 'vendors/jquery/jquery-3.6.0.min.js');
+		ossn_new_external_js('jquery-3.7.1.min.js', 'vendors/jquery/jquery-3.7.1.min.js');
 
 		ossn_new_external_js('tinymce.min', 'vendors/tinymce/tinymce.min.js');
 		ossn_new_external_js('jquery-ui.min.js', '//ajax.googleapis.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js', false);
 
-		ossn_load_external_js('jquery-3.6.0.min.js');
-		ossn_load_external_js('jquery-3.6.0.min.js', 'admin');
+		ossn_load_external_js('jquery-3.7.1.min.js');
+		ossn_load_external_js('jquery-3.7.1.min.js', 'admin');
 
 		ossn_load_external_js('jquery-ui.min.js');
 		ossn_load_external_js('jquery-ui.min.js', 'admin');

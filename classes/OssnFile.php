@@ -2,7 +2,7 @@
 /**
  * Open Source Social Network
  *
- * @package   (openteknik.com).ossn
+ * @package   Open Source Social Network (OSSN)
  * @author    OSSN Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
@@ -581,6 +581,7 @@ class OssnFile extends OssnEntities {
 						),
 						'zip'  => array(
 								'application/zip',
+								'application/x-zip-compressed',
 						),
 						'webp' => array(
 								'image/webp',
@@ -737,13 +738,20 @@ class OssnFile extends OssnEntities {
 						$filesize  = filesize($file);
 						$type      = $this->getFileExtension($file);
 						$MimeTypes = $this->mimeTypes();
-
+						
+						//[B] OssnFile:output doesn't recognize setMimeTypes by component #2331
+						//restricted by component
+						if(isset($this->fileMimeTypes) && is_array($this->fileMimeTypes)){
+							$MimeTypes = $this->fileMimeTypes;
+						}
 						//not getting actual mimetype getting by extension type to avoid any vulnerability.
 						if(isset($MimeTypes[$type][0])) {
 								$MimeType = $MimeTypes[$type][0];
 								if(isset($Mime) && !empty($Mime)) {
 										$MimeType = $Mime;
 								}
+								//[E] Session locking issue #2343
+								session_write_close();
 								ob_flush();
 								header("Content-type: {$MimeType}");
 								header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', strtotime('+6 months')), true);

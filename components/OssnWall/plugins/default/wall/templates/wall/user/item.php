@@ -2,7 +2,7 @@
 /**
  * Open Source Social Network
  *
- * @package   (openteknik.com).ossn
+ * @package   Open Source Social Network (OSSN)
  * @author    OSSN Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
@@ -92,7 +92,7 @@ if ($params['user']->guid !== $params['post']->owner_guid) {
             <?php
             if (!empty($image)) {
                 ?>
-                <img src="<?php echo $image; ?>"/>
+                <div class="ossn-wall-image-container"><img src="<?php echo $image; ?>"/></div>
 
             <?php } ?>          
 		</div>

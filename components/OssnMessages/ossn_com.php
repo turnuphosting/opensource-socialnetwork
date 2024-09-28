@@ -2,7 +2,7 @@
 /**
  * Open Source Social Network
  *
- * @package   (openteknik.com).ossn
+ * @package   Open Source Social Network (OSSN)
  * @author    OSSN Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
@@ -74,7 +74,7 @@ function ossn_messages_page($pages) {
 		$OssnMessages = new OssnMessages;
 		$page         = $pages[0];
 		if(empty($page)) {
-				$page = 'messages';
+				$page = 'all';
 		}
 		switch($page) {
 				case 'message':
@@ -193,20 +193,11 @@ function ossn_messages_page($pages) {
 						$params['recent']       = $OssnMessages->recentChat($loggedin_guid);
 						if($params['recent']) {
 								$params['count_recent'] = $OssnMessages->recentChat($loggedin_guid, true);
-								$active                 = $params['recent'][0];
-								if(isset($active->message_to) && $active->message_to == $loggedin_guid) {
-										$getuser = $active->message_from;
-								}
-								if(isset($active->message_from) && $active->message_from == $loggedin_guid) {
-										$getuser = $active->message_to;
-								}
-								$user = ossn_user_by_guid($getuser);
-								$OssnMessages->markViewed($getuser, $loggedin_guid);
-								$params['data']   = $OssnMessages->getWith($loggedin_guid, $getuser);
-								$params['countm'] = $OssnMessages->getWith($loggedin_guid, $getuser, true);
-								$params['user']   = $user;
+								//[E] Don't open the last message in messages/all #2283								
+								$params['user']   = false;
+								$params['countm'] = false;
 								$contents = array(
-										'content' => ossn_plugin_view('messages/pages/view', $params)
+										'content' => ossn_plugin_view('messages/pages/all', $params)
 								);
 						} else {
 								$contents = array(
@@ -241,6 +232,8 @@ function ossn_messages_page($pages) {
 										//reduce loop for getting user again and again as its only the $friend or loggedin user
 										if($message->message_from != $guid){
 												$user =  ossn_loggedin_user();
+										} else {
+												$user = $friend;	
 										}
 										$params['user']    = $user;
 										$message           = $message->message;

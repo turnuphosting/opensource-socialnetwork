@@ -2,7 +2,7 @@
 /**
  * Open Source Social Network
  *
- * @package   (openteknik.com).ossn
+ * @package   Open Source Social Network (OSSN)
  * @author    OSSN Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
@@ -46,7 +46,6 @@ function ossn_users() {
 				));
 		}
 }
-
 /**
  * Check if the user is logged in or not
  *
@@ -97,6 +96,26 @@ function ossn_loggedin_user() {
 function ossn_user_by_username($username) {
 		$user           = new OssnUser;
 		$user->username = $username;
+		
+		//caching
+		$cache = new OssnDynamicCaching();
+		if($cache->isAvailableEnabled()){
+				try {
+					
+					$data = $cache->handler()->get("ossn_user_by_username({$username})");
+					return $data;
+					
+				} catch(OssnDynamicCacheKeyNotExists $e){
+					
+					$data = $user->getUser();
+					//don't store if its not exists in system
+					if($data){					
+						$cache->handler()->store("ossn_user_by_username({$username})", $data);
+					}
+					return $data;
+				}
+		}	
+		
 		return $user->getUser();
 }
 
@@ -110,6 +129,26 @@ function ossn_user_by_username($username) {
 function ossn_user_by_guid($guid) {
 		$user       = new OssnUser;
 		$user->guid = $guid;
+		
+		//caching
+		$cache = new OssnDynamicCaching();
+		if($cache->isAvailableEnabled()){
+				try {
+					
+					$data = $cache->handler()->get("ossn_user_by_guid({$guid})");
+					return $data;
+					
+				} catch(OssnDynamicCacheKeyNotExists $e){
+					
+					$data = $user->getUser();
+					//don't store if its not exists in system
+					if($data){
+						$cache->handler()->store("ossn_user_by_guid({$guid})", $data);
+					}
+					return $data;
+				}
+		}	
+		
 		return $user->getUser();
 }
 
@@ -123,6 +162,27 @@ function ossn_user_by_guid($guid) {
 function ossn_user_by_email($email) {
 		$user        = new OssnUser;
 		$user->email = $email;
+		
+		//caching
+		$cache = new OssnDynamicCaching();
+		if($cache->isAvailableEnabled()){
+				try {
+					
+					$data = $cache->handler()->get("ossn_user_by_email({$email})");
+					return $data;
+					
+				} catch(OssnDynamicCacheKeyNotExists $e){
+					
+					$data = $user->getUser();
+					//don't store if its not exists in system
+					if($data){
+						$cache->handler()->store("ossn_user_by_email({$email})", $data);
+					}
+					
+					return $data;
+				}
+		}
+		
 		return $user->getUser();
 }
 
@@ -496,4 +556,4 @@ function ossn_get_admin_users() {
 }
 ossn_register_callback('ossn', 'init', 'ossn_users');
 ossn_add_hook('load:settings', 'language', 'ossn_site_user_lang_code');
-ossn_add_hook('user', 'default:fields','ossn_user_fields_set_nonrequired', 201);
+ossn_add_hook('user', 'default:fields','ossn_user_fields_set_nonrequired', 1000);

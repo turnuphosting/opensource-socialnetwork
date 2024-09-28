@@ -3,7 +3,7 @@
  * Open Source Social Network
  *
  * @package   Open Source Social Network
- * @author    Open Social Website Core Team <info@openteknik.com>
+ * @author    Open Source Social Network Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
  * @link      https://www.opensource-socialnetwork.org/
@@ -36,6 +36,7 @@ function ossn_groups() {
 		ossn_group_subpage('requests');
 
 		//group hooks
+		ossn_add_hook('group', 'subpage', 'group_subpage_access_validate');
 		ossn_add_hook('group', 'subpage', 'group_about_page');
 		ossn_add_hook('group', 'subpage', 'group_members_page');
 		ossn_add_hook('group', 'subpage', 'group_edit_page');
@@ -250,8 +251,15 @@ function ossn_group_page($pages) {
 						ossn_error_page();
 				}
 				ossn_set_page_owner_guid($group->guid);
-				ossn_trigger_callback('page', 'load:group');
-
+				ossn_trigger_callback('page', 'load:group', array(
+								'group' => $group, //added OSSN 7.1
+				));
+				$ismember = false;
+				if(ossn_isLoggedin()){
+					$ismember = $group->isMember(NULL, ossn_loggedin_user()->guid);	
+				}
+				//[B] add group user membership status in advance to avoid checking multiple times #2276
+				$params['ismember'] = $ismember;
 				$params['group'] = $group;
 				$title           = $group->title;
 				$view            = ossn_plugin_view('groups/pages/profile', $params);
@@ -280,7 +288,17 @@ function group_about_page($hook, $type, $return, $params) {
 				echo ossn_set_page_layout('module', $mod);
 		}
 }
-
+/**
+ * Restrict access to group subpages if user is not a member and its private group
+ *
+ * @return void
+ * @access private
+ */
+function group_subpage_access_validate($hook, $type, $return, $params){
+	        if($params['group']->membership == OSSN_PRIVATE && !$params['ismember']){
+						redirect("group/{$params['group']->guid}/");	
+			}
+}
 /**
  * Group member page
  *
@@ -406,30 +424,30 @@ function ossn_notificaiton_groups_comments_hook($hook, $type, $return, $params) 
 
 // #186 group join request hook
 function ossn_group_joinrequest_notification($name, $type, $return, $params) {
+		$notif			= $params;
 		$baseurl        = ossn_site_url();
 		$user           = ossn_user_by_guid($params->poster_guid);
-		$user->fullname = "<strong>{$user->fullname}</strong>";
+		
 		$group          = ossn_get_group_by_guid($params->subject_guid);
-		$img            = "<div class='notification-image'><img src='{$baseurl}avatar/{$user->username}/small' /></div>";
-		$type           = "<div class='ossn-groups-notification-icon'></div>";
-		if($params->viewed !== null) {
-				$viewed = '';
-		} elseif($params->viewed == null) {
-				$viewed = 'class="ossn-notification-unviewed"';
-		}
+
 		// lead directly to groups request page
 		$url               = "{$baseurl}group/{$params->subject_guid}/requests";
-		$notification_read = "{$baseurl}notification/read/{$params->guid}?notification=" . urlencode($url);
-		return "<a href='{$notification_read}' class='ossn-group-notification-item'>
-	       <li {$viewed}> {$img}
-		   <div class='notfi-meta'> {$type}
-		   <div class='data'>" .
-		ossn_print("ossn:notifications:{$params->type}", array(
-				$user->fullname,
-				$group->title,
-		)) .
-				'</div>
-		   </div></li></a>';
+		$text = ossn_print("ossn:notifications:{$params->type}", array(
+				"<strong>".$user->fullname."</strong>",
+				"<strong>".$group->title."</strong>",
+		));
+		$iconURL = $user->iconURL()->small;
+		return ossn_plugin_view('notifications/template/view', array(
+				'iconURL'   => $iconURL,
+				'guid'      => $notif->guid,
+				'type'      => 'like:post',
+				'viewed'    => $notif->viewed,
+				'url'       => $url,
+				'icon_type' => 'groups',
+				'instance'  => $notif,
+				'customprint' => $text,
+				'fullname'  => $user->fullname,
+		));		   		   
 }
 /**
  * Delete group relations if user is deleted

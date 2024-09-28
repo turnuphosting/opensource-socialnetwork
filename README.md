@@ -1,11 +1,11 @@
-Open Source Social Network [7.1-dev]
+Open Source Social Network [7.7-dev]
 ======================================
 [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=102)](https://www.opensource-socialnetwork.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://www.opensource-socialnetwork.org/)
 [![Download Latest](https://img.shields.io/badge/Download-Latest%20Version-blue.svg)](https://www.opensource-socialnetwork.org/download)
 
 [![DeepScan grade](https://deepscan.io/api/teams/4774/projects/6525/branches/747601/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=4774&pid=6525&bid=747601)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/88c6ef38f593440cafe7ba350e592649)](https://www.codacy.com/gh/opensource-socialnetwork/opensource-socialnetwork/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=opensource-socialnetwork/opensource-socialnetwork&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/88c6ef38f593440cafe7ba350e592649)](https://app.codacy.com/gh/opensource-socialnetwork/opensource-socialnetwork/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 Opensource-Socialnetwork (OSSN) is a social networking software written in PHP. It allows you to make a social networking website and helps your members build social relationships, with people who share similar professional or personal interests. It is available in 17 international languages.
 
@@ -16,7 +16,7 @@ Kernighan & Ritchie (K&R Variant 1TBS) indentation standard is used for the OSSN
 - Copyright (C) ENGR. SYED ARSALAN HUSSAIN SHAH <arsalan@buddyexpress.net>,
 - Copyright (C) OPEN SOURCE SOCIAL NETWORK <https://www.opensource-socialnetwork.org>,
 - Copyright (C) OPEN TEKNIK LLC <https://www.openteknik.com>,
-- Copyright (C) PENHOST247 LLC <https://www.openhost247.com>,
+- Copyright (C) OPENHOST247 LLC <https://www.openhost247.com>,
 - Copyright (C) 2015-2021 SOFTLAB24 LTD <https://www.softlab24.com>
 - Copyright (C) 2014-2015 INFORMATIKON TECHNOLOGIES <https://www.informatikon.com>
 
@@ -37,7 +37,7 @@ Languages
 | Spanish | Italian | Russian | 
 | Dutch | Hebrew | Greek |
 | Esperanto | Japanese | Indonesian |
-| Traditional Chinese | Korean | 
+| Traditional Chinese | Korean | Hungarian |
 
 Front-End Features
 ===================
@@ -105,7 +105,7 @@ https://www.opensource-socialnetwork.org/wiki/view/706/how-to-install-open-sourc
 - Web Installer https://www.opensource-socialnetwork.org/download
 - VM Image - https://www.opensource-socialnetwork.org/download-vm-image
 
-Installation on Ubuntu x64 18.04/20.04/21.04 LTS (Experimental) 
+Installation on Ubuntu x64 18.04/20.04/21.04 LTS
 ```
 sudo add-apt-repository ppa:arsalanshah/opensource-socialnetwork
 sudo apt-get update

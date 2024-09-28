@@ -2,7 +2,7 @@
 /**
  *  Open Source Social Network
  *
- * @package   (openteknik.com).ossn
+ * @package   Open Source Social Network (OSSN)
  * @author    OSSN Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
@@ -35,6 +35,22 @@ class OssnFactory extends stdClass {
 						'connect' => '/connect.py'
 				);
 		}
+		/** 
+		 * Upgrade init
+		 * 
+		 * @return mixed
+		 */
+		public function upgrade(){
+				return $this->Call('upgrade');	
+		}
+		/** 
+		 * Connect init
+		 * 
+		 * @return mixed
+		 */
+		public function connect(){
+				return $this->Call('connect');	
+		}		
 		/**
 		 * Prepare Call
 		 *

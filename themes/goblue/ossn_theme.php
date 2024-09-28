@@ -2,7 +2,7 @@
 /**
  * Open Source Social Network
  *
- * @package   (openteknik.com).ossn
+ * @package   Open Source Social Network (OSSN)
  * @author    OSSN Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
@@ -39,13 +39,41 @@ function ossn_goblue_theme_init() {
 				));
 				ossn_register_site_settings_page('goblue', 'settings/admin/goblue');
 				ossn_register_action('goblue/settings', __THEMEDIR__ . 'actions/settings.php');
+				//[E] Allow custom logos to be saved with different file name #2334
+				ossn_register_action('goblue/settings/logos_bgs_reset', __THEMEDIR__ . 'actions/logos_bgs_reset.php');
 		}
+}
+function ossn_goblue_set_custom_logos_bgs_setting($key, $val) {
+		$settings = ossn_goblue_get_custom_logos_bgs_setting();
+		if(!empty($key) && !empty($val)) {
+				if(!$settings) {
+						$settings = array();
+				}
+				$settings[$key] = $val;
+				$json           = json_encode($settings);
+				$config         = ossn_route()->themes . 'goblue/logos_backgrounds/config.json';
+				return file_put_contents($config, $json);
+		}
+		return false;
+}
+function ossn_goblue_get_custom_logos_bgs_setting() {
+		$config = ossn_route()->themes . 'goblue/logos_backgrounds/config.json';
+		if(file_exists($config)) {
+				$json = file_get_contents($config);
+				if(!empty($json)) {
+						$json = json_decode($json, true);
+						if(json_last_error() === JSON_ERROR_NONE) {
+								return $json;
+						}
+				}
+		}
+		return false;
 }
 function ossn_goblue_head() {
 		$head = array();
 
 		$head[] = ossn_html_css(array(
-				'href' => '//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css',
+				'href' => '//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css',
 		));
 		$head[] = ossn_html_css(array(
 				'href' => 'https://fonts.googleapis.com/css?family=PT+Sans:400italic,700,400',
@@ -61,7 +89,7 @@ function ossn_goblue_head() {
 function ossn_goblue_admin_head() {
 		$head   = array();
 		$head[] = ossn_html_css(array(
-				'href' => '//cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css',
+				'href' => '//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css',
 		));
 		$head[] = ossn_html_css(array(
 				'href' => '//fonts.googleapis.com/css?family=Roboto+Slab:300,700,400',

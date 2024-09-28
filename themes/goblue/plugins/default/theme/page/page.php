@@ -2,7 +2,7 @@
 /**
  * Open Source Social Network
  *
- * @package   (openteknik.com).ossn
+ * @package   Open Source Social Network (OSSN)
  * @author    OSSN Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
@@ -57,7 +57,7 @@ if (isset($params['contents'])) {
           </div>    
 		</div>
     </div>
-    <div id="theme-config" class="hidden" data-desktop-cover-height="200" data-minimum-cover-image-width="1040"></div>	
+    <div id="ossn-theme-config" class="hidden" data-desktop-cover-height="300" data-minimum-cover-image-width="1200"></div>	
     <?php echo ossn_fetch_extend_views('ossn/page/footer'); ?>           
 </body>
 </html>

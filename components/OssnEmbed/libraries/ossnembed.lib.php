@@ -3,7 +3,7 @@
  * Open Source Social Network
  *
  * @package   Open Source Social Network
- * @author    Open Social Website Core Team <info@openteknik.com>
+ * @author    Open Source Social Network Core Team <info@openteknik.com>
  * @copyright (C) OpenTeknik LLC
  * @license   Open Source Social Network License (OSSN LICENSE)  http://www.opensource-socialnetwork.org/licence
  * @link      https://www.opensource-socialnetwork.org/
@@ -55,7 +55,13 @@ function ossn_embed_create_embed_object($url, $guid, $videowidth=0) {
 	} else if (strpos($url, 'metacafe.com') != false) {
 		return ossn_embed_metacafe_handler($url, $guid, $videowidth);
 	} else if (strpos($url, 'dailymotion.com') != false) {
-		return ossn_embed_dm_handler($url, $guid, $videowidth);
+		//day.li not being parsed by embed component
+ 		$url = str_replace('dai.ly', 'dailymotion.com', $url);
+  		return ossn_embed_dm_handler($url, $guid, $videowidth);
+ 	} else if (strpos($url, 'dai.ly') != false) {
+ 		return ossn_embed_dm_shortener_parse_url($url, $guid, $videowidth);
+	} else if(strpos($url, 'rumble.com/embed') != false){
+		return  ossn_embed_rumble_handler($url, $guid, $videowidth);
 	} else {
 		return false;
 	}
@@ -107,8 +113,11 @@ function ossn_embed_add_object($type, $url, $guid, $width, $height) {
 			$videodiv .= "<iframe class='embed-responsive-item' src=\"//www.metacafe.com/embed/{$url}\" width=\"$width\" height=\"$height\" wmode=\"transparent\" pluginspage=\"http://www.macromedia.com/go/getflashplayer\"></iframe>";
 			break;
 		case 'dm':
-			$videodiv .= "<iframe src=\"//www.dailymotion.com/embed/video/{$url}\" width=\"$width\" height=\"$height\" allowFullScreen></iframe>"; 
+			$videodiv .= "<iframe class='embed-responsive-item' src=\"//www.dailymotion.com/embed/video/{$url}\" width=\"$width\" height=\"$height\" allowFullScreen></iframe>"; 
 			break;
+		case 'rumble':
+			$videodiv .= "<iframe class='embed-responsive-item' src=\"//rumble.com/embed/{$url}/\" width=\"$width\" height=\"$height\" allowFullScreen></iframe>"; 
+			break;			
 	}
 
 	$videodiv .= "</span>";
@@ -368,7 +377,47 @@ function ossn_embed_dm_handler($url, $guid, $videowidth) {
 
 	return $embed_object;
 }
+/**
+ * main Rumble interface
+ *
+ * @param string $url
+ * @param integer $guid unique identifier of the widget
+ * @param integer $videowidth  optional override of admin set width
+ * @return string css style, video div, and flash <object>
+ */
+function ossn_embed_rumble_handler($url, $guid, $videowidth) {
+	// this extracts the core part of the url needed for embeding
+	$videourl = ossn_embed_rumble_parse_url($url);
+	if (!isset($videourl)) {
+		return false;
+	}
 
+	ossn_embed_calc_size($videowidth, $videoheight, 420/300, 35);
+
+	$embed_object = ossn_embed_add_css($guid, $videowidth, $videoheight);
+	$embed_object .= ossn_embed_add_object('rumble', $videourl, $guid, $videowidth, $videoheight);
+
+	return $embed_object;
+}
+/**
+ * parse rumble url
+ *
+ * @param string $url
+ * @return string hash
+ */
+function ossn_embed_rumble_parse_url($url) {
+	if (strpos($url, '/embed/') == false) {
+		return false;
+	}
+	if (!preg_match('/(https?:\/\/)?(rumble\.com\/embed\/)([0-9a-zA-Z_-]*)(\/)/', $url, $matches)) {
+		//echo "malformed rumble  url";
+		return;
+	}
+
+	$hash = $matches[3];
+
+	return $hash;
+}
 /**
  * parse dm url
  *
@@ -389,4 +438,23 @@ function ossn_embed_dm_parse_url($url) {
 	//echo $hash;
 
 	return $hash;
+}
+
+/**
+ * parse dai.ly url
+ *
+ * @param string $url
+ * @return string dailymotion/v/hash
+ */
+function ossn_embed_dm_shortener_parse_url($url) {
+	$path = parse_url($url, PHP_URL_PATH);
+	$videourl = '' . $path;
+
+	ossn_embed_calc_size($videowidth, $videoheight, 425/320, 24);
+
+	$embed_object = ossn_embed_add_css($guid, $videowidth, $videoheight);
+
+	$embed_object .= ossn_embed_add_object('dm', $videourl, $guid, $videowidth, $videoheight);
+
+	return $embed_object;
 }
